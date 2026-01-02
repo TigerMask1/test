@@ -2,11 +2,9 @@
 set -e
 
 echo "Starting Minetest server..."
-/usr/bin/minetestserver \
-  --worldname "$MINETEST_WORLD_NAME" \
-  --port "$MINETEST_SERVER_PORT" &
+minetestserver --worldname "$MINETEST_WORLD_NAME" --port "$MINETEST_SERVER_PORT" &
 
-echo "Starting HTTP server for Render..."
+echo "HTTP server alive for Render..."
 python3 - <<EOF
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
