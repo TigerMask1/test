@@ -1,7 +1,12 @@
 #!/bin/bash
+set -e
 
-minetestserver --worldname "$MINETEST_WORLD_NAME" --port "$MINETEST_SERVER_PORT" &
+echo "Starting Minetest server..."
+/usr/bin/minetestserver \
+  --worldname "$MINETEST_WORLD_NAME" \
+  --port "$MINETEST_SERVER_PORT" &
 
+echo "Starting HTTP server for Render..."
 python3 - <<EOF
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
