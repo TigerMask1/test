@@ -1,20 +1,24 @@
-FROM registry.gitlab.com/minetest/minetest/server:latest
+FROM debian:bookworm-slim
 
-# Install Python (Alpine)
-RUN apk add --no-cache python3
+# Install required packages
+RUN apt-get update && apt-get install -y \
+  python3 \
+  curl \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
-# Environment variables
+# Install Minetest server
+RUN curl -L https://github.com/minetest/minetest/releases/download/5.6.1/minetest-server-5.6.1-linux.tar.gz \
+  | tar -xz -C /opt
+
+ENV PATH="/opt/minetest/bin:${PATH}"
 ENV MINETEST_SERVER_PORT=30000
 ENV MINETEST_WORLD_NAME=world
-ENV HTTP_PORT=10000
 
-# Expose ports
 EXPOSE 30000/udp
 EXPOSE 10000/tcp
 
-# Copy start script
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
-# Start
 CMD ["/bin/sh", "/start.sh"]
